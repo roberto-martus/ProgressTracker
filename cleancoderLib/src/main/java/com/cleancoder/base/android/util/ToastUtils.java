@@ -1,4 +1,4 @@
-package com.cleancoder.base.android.ui;
+package com.cleancoder.base.android.util;
 
 import android.content.Context;
 import android.widget.Toast;

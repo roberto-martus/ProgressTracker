@@ -17,6 +17,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ProgressableItemActivity"
+            android:label="@string/title_activity_progressable_item" >
+        </activity>
+        <activity
+            android:name=".testhelpers.ProgressableItemFragmentTestHelperActivity"
+            android:label="Test Helper" >
+        </activity>
     </application>
 
 </manifest>
