@@ -6,7 +6,8 @@ import java.util.List;
 public class MyDaoGenerator {
 
     private static final List<? extends SchemaProvider> SCHEMA_PROVIDERS = Arrays.asList(
-            new ProgressableItemSchemaProvider()
+            new ProgressableItemSchemaProvider(),
+            new WorkAsAmountSchemaProvider()
     );
 
     public static void main(String args[]) throws Exception {

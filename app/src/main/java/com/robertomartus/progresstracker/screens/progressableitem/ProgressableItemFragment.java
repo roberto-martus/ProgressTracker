@@ -1,4 +1,4 @@
-package com.robertomartus.progresstracker;
+package com.robertomartus.progresstracker.screens.progressableitem;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,25 +7,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cleancoder.base.android.util.LockingOnViewClickListener;
+import com.cleancoder.base.android.util.Unlocker;
+import com.robertomartus.progresstracker.R;
+
 /**
  * Created by Leonid on 15.12.2014.
  */
 public class ProgressableItemFragment extends android.support.v4.app.Fragment {
 
     public static interface Callbacks {
-        void onAddButtonClicked();
-        void onRemoveButtonClicked();
+        void onAddButtonClicked(Unlocker addButtonUnlocker);
+        void onRemoveButtonClicked(Unlocker removeButtonUnlocker);
     }
 
     public static class DefaultCallbacks implements Callbacks {
 
         @Override
-        public void onAddButtonClicked() {
+        public void onAddButtonClicked(Unlocker addButtonUnlocker) {
             // override to implement
         }
 
         @Override
-        public void onRemoveButtonClicked() {
+        public void onRemoveButtonClicked(Unlocker removeButtonUnlocker) {
             // override to implement
         }
     }
@@ -36,6 +40,12 @@ public class ProgressableItemFragment extends android.support.v4.app.Fragment {
     private View contentView;
     private View addButton;
     private View removeButton;
+
+
+    public static ProgressableItemFragment newInstance(long itemId) {
+        // TODO
+        return null;
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -62,31 +72,19 @@ public class ProgressableItemFragment extends android.support.v4.app.Fragment {
 
     private void initContentView() {
         addButton = contentView.findViewById(R.id.add_button);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(new LockingOnViewClickListener() {
             @Override
-            public void onClick(View v) {
-                onAddButtonClicked();
+            protected void onClickAfterViewLocked(View view) {
+                callbacks.onAddButtonClicked(this);
             }
         });
         removeButton = contentView.findViewById(R.id.remove_button);
-        removeButton.setOnClickListener(new View.OnClickListener() {
+        removeButton.setOnClickListener(new LockingOnViewClickListener() {
             @Override
-            public void onClick(View v) {
-                onRemoveButtonClicked();
+            protected void onClickAfterViewLocked(View view) {
+                callbacks.onRemoveButtonClicked(this);
             }
         });
-    }
-
-    private void onAddButtonClicked() {
-        addButton.setEnabled(false);
-        callbacks.onAddButtonClicked();
-        addButton.setEnabled(true);
-    }
-
-    private void onRemoveButtonClicked() {
-        removeButton.setEnabled(false);
-        callbacks.onRemoveButtonClicked();
-        removeButton.setEnabled(true);
     }
 
 }

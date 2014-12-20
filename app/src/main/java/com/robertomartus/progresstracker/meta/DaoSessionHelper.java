@@ -1,4 +1,4 @@
-package com.robertomartus.progresstracker;
+package com.robertomartus.progresstracker.meta;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

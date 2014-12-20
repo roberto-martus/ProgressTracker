@@ -4,9 +4,6 @@ package com.robertomartus.progresstracker.data;
 
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
-
-import com.google.common.base.Objects;
-
 /**
  * Entity mapped to table PROGRESSABLE_ITEM.
  */
@@ -90,7 +87,7 @@ public class ProgressableItem {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("name", name)
                 .add("description", description)
