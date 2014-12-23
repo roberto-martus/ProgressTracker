@@ -44,7 +44,7 @@ public class ProgressableItemFragment extends android.support.v4.app.Fragment {
 
     public static ProgressableItemFragment newInstance(long itemId) {
         // TODO
-        return null;
+        return new ProgressableItemFragment();
     }
 
     @Override

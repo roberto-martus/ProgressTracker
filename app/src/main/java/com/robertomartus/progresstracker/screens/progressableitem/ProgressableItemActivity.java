@@ -3,10 +3,11 @@ package com.robertomartus.progresstracker.screens.progressableitem;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
+import com.cleancoder.base.android.util.Unlocker;
 import com.robertomartus.progresstracker.R;
 
 
-public class ProgressableItemActivity extends ActionBarActivity {
+public class ProgressableItemActivity extends ActionBarActivity implements ProgressableItemFragment.Callbacks {
 
     private static final long ITEM_ID = 1342;
 
@@ -21,4 +22,14 @@ public class ProgressableItemActivity extends ActionBarActivity {
         }
     }
 
+    @Override
+    public void onAddButtonClicked(Unlocker addButtonUnlocker) {
+        addButtonUnlocker.unlock();
+    }
+
+    @Override
+    public void onRemoveButtonClicked(Unlocker removeButtonUnlocker) {
+        removeButtonUnlocker.unlock();
+    }
+    
 }

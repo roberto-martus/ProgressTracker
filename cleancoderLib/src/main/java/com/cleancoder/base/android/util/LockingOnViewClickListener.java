@@ -23,7 +23,7 @@ public abstract class LockingOnViewClickListener implements View.OnClickListener
         } else {
             if (previouslyClickedView != view) {
                 throw new IllegalStateException(
-                        "You can't use one locking OnClickListener for different views");
+                        "You can't use the same locking OnClickListener for different views");
             }
         }
         view.setEnabled(false);
