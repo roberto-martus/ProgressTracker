@@ -12,10 +12,11 @@ public class WorkAsAmountSchemaProvider implements SchemaProvider {
     @Override
     public Schema getSchema() {
         Schema schema = new Schema(VERSION, Paths.getGeneratedClassesDestination());
-        Entity entity = schema.addEntity("WorkAsAmount");
-        entity.implementsInterface(Paths.getDataPackage() + ".Work");
+        Entity entity = schema.addEntity("WorkAsAmountGreenDaoImpl");
+        entity.implementsInterface(Paths.getDataPackage() + ".WorkAsAmount");
         entity.addIdProperty();
-        entity.addLongProperty("amount");
+        entity.addLongProperty("done");
+        entity.addLongProperty("total");
         entity.setHasKeepSections(true);
         return schema;
     }

@@ -1,1 +1,1 @@
-include ':app', ':cleancoderLib', ':MyDaoGenerator'
+include ':app', ':cleancoderLib', ':MyDaoGenerator', ':ProgressWheel'

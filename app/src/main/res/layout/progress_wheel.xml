@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.todddavies.components.progressbar.ProgressWheel
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+    ProgressWheel:rimColor="@color/progress_details_rim_color"
+    ProgressWheel:barColor="@color/progress_details_bar_color"
+    ProgressWheel:contourColor="@color/progress_details_circle_color"
+    ProgressWheel:rimWidth="@dimen/progress_details_rim_width"
+    ProgressWheel:barWidth="@dimen/progress_details_bar_width"
+    android:id="@+id/progress_view"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
