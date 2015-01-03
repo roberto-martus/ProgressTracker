@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="progress_details_rim_width">32dp</dimen>
+    <dimen name="progress_details_bar_width">32dp</dimen>
+
+    <dimen name="progress_display_padding_left">10dp</dimen>
+    <dimen name="progress_display_padding_right">10dp</dimen>
+    <dimen name="progress_display_padding_top">10dp</dimen>
+    <dimen name="progress_display_padding_bottom">10dp</dimen>
+</resources>
