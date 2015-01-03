@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="progress_details_rim_width">32dp</dimen>
-    <dimen name="progress_details_bar_width">32dp</dimen>
+    <dimen name="progress_details_rim_width">28dp</dimen>
+    <dimen name="progress_details_bar_width">@dimen/progress_details_rim_width</dimen>
 
     <dimen name="progress_display_padding_left">5dp</dimen>
     <dimen name="progress_display_padding_right">5dp</dimen>
