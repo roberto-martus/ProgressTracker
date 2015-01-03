@@ -1,7 +1,9 @@
 package com.robertomartus.progresstracker.meta;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteDatabase;
 
+import com.robertomartus.progresstracker.data.DaoMaster;
 import com.robertomartus.progresstracker.data.DaoSession;
 
 /**
@@ -11,7 +13,6 @@ public class ProgressTrackerApplication extends Application {
 
     public static final String DAO_SESSION_DATABASE_NAME = "progress-tracker-dao-db";
 
-    private DaoSessionHelper.SetupResult setupResult;
     private DaoSession daoSession;
 
     @Override
@@ -21,16 +22,14 @@ public class ProgressTrackerApplication extends Application {
     }
 
     private void setupDaoSession() {
-        setupResult = DaoSessionHelper.setupDaoSession(this, DAO_SESSION_DATABASE_NAME);
-        daoSession = setupResult.getDaoMaster().newSession();
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, DAO_SESSION_DATABASE_NAME, null);
+        SQLiteDatabase database = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(database);
+        daoSession = daoMaster.newSession();
     }
 
     public DaoSession getDaoSession() {
         return daoSession;
-    }
-
-    public DaoSessionHelper.SetupResult getDaoSetupResult() {
-        return setupResult;
     }
 
 }
