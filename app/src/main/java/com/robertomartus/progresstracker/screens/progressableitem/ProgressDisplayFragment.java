@@ -10,17 +10,14 @@ import android.view.ViewGroup;
 import com.robertomartus.progresstracker.R;
 import com.robertomartus.progresstracker.data.WorkAsAmount;
 import com.robertomartus.progresstracker.data.WorkAsAmountGreenDaoImpl;
-import com.robertomartus.progresstracker.data.adapter.GreenDaoStorageAdaptersProvider;
 import com.robertomartus.progresstracker.data.adapter.StorageAdapter;
-import com.robertomartus.progresstracker.data.adapter.StorageAdaptersProvider;
+import com.robertomartus.progresstracker.meta.CurrentStorageAdaptersProvider;
 import com.todddavies.components.progressbar.ProgressWheel;
 
 /**
  * Created by Leonid on 29.12.2014.
  */
 public class ProgressDisplayFragment extends Fragment {
-
-    private static final StorageAdaptersProvider STORAGE_ADAPTERS_PROVIDER = new GreenDaoStorageAdaptersProvider();
 
     private static final String KEY_ITEM_ID = "item_id";
 
@@ -41,7 +38,8 @@ public class ProgressDisplayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        workAsAmountStorageAdapter = STORAGE_ADAPTERS_PROVIDER.getWorkAsAmountStorageAdapter(getActivity());
+        workAsAmountStorageAdapter =
+                CurrentStorageAdaptersProvider.get().getWorkAsAmountStorageAdapter(getActivity());
     }
 
     @Override
@@ -58,13 +56,16 @@ public class ProgressDisplayFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        update();
+        refresh();
     }
 
-    public void update() {
+    public void refresh() {
         long itemId = getArguments().getLong(KEY_ITEM_ID);
-        workAsAmountStorageAdapter.insertOrReplace(dummyWorkAsAmount(itemId));
         workAsAmount = workAsAmountStorageAdapter.loadByKey(itemId);
+        if (workAsAmount == null) {
+            workAsAmountStorageAdapter.insertOrReplace(dummyWorkAsAmount(itemId));
+            workAsAmount = workAsAmountStorageAdapter.loadByKey(itemId);
+        }
         displayWork();
     }
 

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="icon_toast_padding_horizontal">10dp</dimen>
+    <dimen name="icon_toast_padding_vertical">6dp</dimen>
+    <dimen name="icon_toast_space_between_icon_and_text">8dp</dimen>
+</resources>

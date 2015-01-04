@@ -1,6 +1,8 @@
-package com.cleancoder.base.android.util;
+package com.cleancoder.base.android.ui;
 
 import android.view.View;
+
+import com.cleancoder.base.android.util.Unlocker;
 
 import java.lang.ref.WeakReference;
 

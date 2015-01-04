@@ -11,7 +11,7 @@ public interface StorageAdapter<E,K> {
     List<? extends E> loadAll();
 
     void insert(E entity);
-    void insert(Iterable<? extends E> entity);
+    void insert(Iterable<? extends E> entities);
     void insertOrReplace(E entity);
 
     void deleteByKey(K key);
@@ -20,6 +20,6 @@ public interface StorageAdapter<E,K> {
     void refresh(E entity);
 
     void update(E entity);
-    void update(Iterable<? extends E> entity);
+    void update(Iterable<? extends E> entities);
 
 }

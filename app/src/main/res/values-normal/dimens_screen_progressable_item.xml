@@ -7,4 +7,7 @@
     <dimen name="progress_display_padding_right">5dp</dimen>
     <dimen name="progress_display_padding_top">5dp</dimen>
     <dimen name="progress_display_padding_bottom">5dp</dimen>
+
+    <dimen name="dialog_add_progress_min_button_width">110dp</dimen>
+
 </resources>
