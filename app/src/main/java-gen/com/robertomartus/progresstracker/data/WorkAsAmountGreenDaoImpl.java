@@ -11,7 +11,7 @@ import com.google.common.base.Objects;
 /**
  * Entity mapped to table WORK_AS_AMOUNT_GREEN_DAO_IMPL.
  */
-public class WorkAsAmountGreenDaoImpl implements com.robertomartus.progresstracker.data.WorkAsAmount {
+public class WorkAsAmountGreenDaoImpl implements com.robertomartus.progresstracker.data.WorkAsAmount, java.io.Serializable {
 
     private Long id;
     private Long done;

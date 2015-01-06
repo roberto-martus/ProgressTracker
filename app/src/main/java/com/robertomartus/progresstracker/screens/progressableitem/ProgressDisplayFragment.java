@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.robertomartus.progresstracker.R;
 import com.robertomartus.progresstracker.data.WorkAsAmount;
-import com.robertomartus.progresstracker.data.WorkAsAmountGreenDaoImpl;
 import com.robertomartus.progresstracker.data.adapter.StorageAdapter;
 import com.robertomartus.progresstracker.meta.CurrentStorageAdaptersProvider;
 import com.todddavies.components.progressbar.ProgressWheel;
@@ -21,10 +20,11 @@ public class ProgressDisplayFragment extends Fragment {
 
     private static final String KEY_ITEM_ID = "item_id";
 
-    private ProgressWheel progressView;
-    private View contentView;
-    private WorkAsAmount workAsAmount;
+    private ProgressWheel progressDisplayView;
     private StorageAdapter<WorkAsAmount, Long> workAsAmountStorageAdapter;
+    private View contentView;
+    private View loadingView;
+    private WorkAsAmount workAsAmount;
 
 
     public static ProgressDisplayFragment newInstance(long itemId) {
@@ -50,32 +50,25 @@ public class ProgressDisplayFragment extends Fragment {
     }
 
     private void initContentView() {
-        progressView = (ProgressWheel) contentView.findViewById(R.id.progress_view);
+        progressDisplayView = (ProgressWheel) contentView.findViewById(R.id.progress_display_view);
+        loadingView = contentView.findViewById(R.id.show_loading_view);
+        showLoading();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        refresh();
+    private void showLoading() {
+        loadingView.setVisibility(View.VISIBLE);
+        progressDisplayView.setVisibility(View.INVISIBLE);
     }
 
-    public void refresh() {
-        long itemId = getArguments().getLong(KEY_ITEM_ID);
-        workAsAmount = workAsAmountStorageAdapter.loadByKey(itemId);
+    public void show(WorkAsAmount workAsAmount) {
         if (workAsAmount == null) {
-            workAsAmountStorageAdapter.insertOrReplace(dummyWorkAsAmount(itemId));
-            workAsAmount = workAsAmountStorageAdapter.loadByKey(itemId);
+            showLoading();
+            return;
         }
-        displayWork();
-    }
-
-    private void displayWork() {
         long progress = (workAsAmount.getDone() * 360) / workAsAmount.getTotal();
-        progressView.setProgress((int) progress);
-    }
-
-    private WorkAsAmountGreenDaoImpl dummyWorkAsAmount(long itemId) {
-        return new WorkAsAmountGreenDaoImpl(itemId, 10L, 200L);
+        progressDisplayView.setProgress((int) progress);
+        loadingView.setVisibility(View.INVISIBLE);
+        progressDisplayView.setVisibility(View.VISIBLE);
     }
 
 }

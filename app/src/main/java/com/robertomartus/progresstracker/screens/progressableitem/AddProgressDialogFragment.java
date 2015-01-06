@@ -1,26 +1,29 @@
 package com.robertomartus.progresstracker.screens.progressableitem;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.NumberPicker;
 
 import com.cleancoder.base.android.ui.IconToast;
+import com.cleancoder.base.android.util.DrawableFromResourcesProvider;
+import com.cleancoder.base.android.util.ResourceProvider;
+import com.cleancoder.base.android.util.StringFromResourcesProvider;
 import com.google.common.base.Optional;
 import com.robertomartus.progresstracker.R;
 import com.robertomartus.progresstracker.data.WorkAsAmount;
-import com.robertomartus.progresstracker.data.adapter.StorageAdapter;
-import com.robertomartus.progresstracker.meta.CurrentStorageAdaptersProvider;
+import com.robertomartus.progresstracker.util.TitleBarDialogFragment;
+
+import java.io.Serializable;
 
 /**
  * Created by Leonid on 04.01.2015.
  */
-public class AddProgressDialogFragment extends DialogFragment {
+public class AddProgressDialogFragment extends TitleBarDialogFragment {
 
     public static interface Callbacks {
         void onAddProgress(int progress);
@@ -34,22 +37,21 @@ public class AddProgressDialogFragment extends DialogFragment {
     };
 
 
-    private static final String KEY_ITEM_ID = "item_id";
+    private static final String KEY_WORK = "work";
 
     private static final int MIN_PROGRESS_TO_ADD = 0;
 
     private Callbacks callbacks;
     private NumberPicker progressPicker;
-    private StorageAdapter<WorkAsAmount, Long> workAsAmountStorageAdapter;
     private View addProgressButton;
     private View cancelButton;
     private View contentView;
 
 
-    public static AddProgressDialogFragment newInstance(long itemId) {
+    public static AddProgressDialogFragment newInstance(WorkAsAmount work) {
         AddProgressDialogFragment dialogFragment = new AddProgressDialogFragment();
         Bundle args = new Bundle();
-        args.putLong(KEY_ITEM_ID, itemId);
+        args.putSerializable(KEY_WORK, (Serializable) work);
         dialogFragment.setArguments(args);
         return dialogFragment;
     }
@@ -67,22 +69,19 @@ public class AddProgressDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        workAsAmountStorageAdapter =
-                CurrentStorageAdaptersProvider.get().getWorkAsAmountStorageAdapter(getActivity());
+    protected ResourceProvider<String> getTitle() {
+        return new StringFromResourcesProvider(R.string.dialog_add_progress_title);
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getDialog().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_action_done);
+    protected ResourceProvider<Drawable> getTitleIcon() {
+        return new DrawableFromResourcesProvider(R.drawable.ic_action_done);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getDialog().setTitle(R.string.dialog_add_progress_title);
-        getDialog().requestWindowFeature(Window.FEATURE_LEFT_ICON);
+    protected View prepareContentView(LayoutInflater inflater,
+                                      @Nullable ViewGroup container,
+                                      @Nullable Bundle savedInstanceState) {
         contentView = inflater.inflate(R.layout.dialog_fragment_add_progress, null);
         initContentView();
         return contentView;
@@ -142,8 +141,7 @@ public class AddProgressDialogFragment extends DialogFragment {
     }
 
     private void setOnResume() {
-        long itemId = getArguments().getLong(KEY_ITEM_ID);
-        WorkAsAmount work = workAsAmountStorageAdapter.loadByKey(itemId);
+        WorkAsAmount work = (WorkAsAmount) getArguments().getSerializable(KEY_WORK);
         progressPicker.setMinValue(MIN_PROGRESS_TO_ADD);
         int maxPossibleProgressToAdd = (int) (work.getTotal() - work.getDone());
         progressPicker.setMaxValue(maxPossibleProgressToAdd);

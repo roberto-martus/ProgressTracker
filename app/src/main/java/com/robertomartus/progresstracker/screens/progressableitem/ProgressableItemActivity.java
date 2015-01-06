@@ -19,6 +19,7 @@ public class ProgressableItemActivity extends ActionBarActivity
     private static final long ITEM_ID = 1342;
 
     private StorageAdapter<WorkAsAmount, Long> workAsAmountStorageAdapter;
+    private WorkAsAmount work;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class ProgressableItemActivity extends ActionBarActivity
         setContentView(R.layout.activity_progressable_item);
         workAsAmountStorageAdapter =
                 CurrentStorageAdaptersProvider.get().getWorkAsAmountStorageAdapter(this);
+        work = workAsAmountStorageAdapter.loadByKey(ITEM_ID);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.progress_display_fragment_container,
@@ -54,7 +56,7 @@ public class ProgressableItemActivity extends ActionBarActivity
     }
 
     private void onAddButtonClicked() {
-        AddProgressDialogFragment dialog = AddProgressDialogFragment.newInstance(ITEM_ID);
+        AddProgressDialogFragment dialog = AddProgressDialogFragment.newInstance(work);
         dialog.show(getSupportFragmentManager(), TAG_ADD_PROGRESS_DIALOG_FRAGMENT);
     }
 
@@ -65,21 +67,30 @@ public class ProgressableItemActivity extends ActionBarActivity
     @Override
     public void onAddProgress(int progress) {
         addProgress(progress);
-        updateProgressDisplay();
+        displayCurrentProgress();
     }
 
     private void addProgress(int progress) {
-        WorkAsAmount work = workAsAmountStorageAdapter.loadByKey(ITEM_ID);
         work.setDone(work.getDone() + progress);
         workAsAmountStorageAdapter.update(work);
     }
 
-    private void updateProgressDisplay() {
+    private void displayCurrentProgress() {
         ProgressDisplayFragment progressDisplayFragment = (ProgressDisplayFragment)
                 getSupportFragmentManager().findFragmentByTag(TAG_PROGRESS_DISPLAY_FRAGMENT);
         if (progressDisplayFragment != null) {
-            progressDisplayFragment.refresh();
         }
+        progressDisplayFragment.show(work);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setOnResume();
+    }
+
+    private void setOnResume() {
+        displayCurrentProgress();
     }
 
 }

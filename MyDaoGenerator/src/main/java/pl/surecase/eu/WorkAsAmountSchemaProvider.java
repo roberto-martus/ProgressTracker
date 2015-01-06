@@ -18,6 +18,7 @@ public class WorkAsAmountSchemaProvider implements SchemaProvider {
         entity.addLongProperty("done");
         entity.addLongProperty("total");
         entity.setHasKeepSections(true);
+        entity.implementsSerializable();
         return schema;
     }
 }
