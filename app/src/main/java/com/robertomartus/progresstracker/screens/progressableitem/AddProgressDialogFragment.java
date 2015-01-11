@@ -15,10 +15,7 @@ import com.cleancoder.base.android.util.ResourceProvider;
 import com.cleancoder.base.android.util.StringFromResourcesProvider;
 import com.google.common.base.Optional;
 import com.robertomartus.progresstracker.R;
-import com.robertomartus.progresstracker.data.WorkAsAmount;
 import com.robertomartus.progresstracker.util.TitleBarDialogFragment;
-
-import java.io.Serializable;
 
 /**
  * Created by Leonid on 04.01.2015.
@@ -26,32 +23,29 @@ import java.io.Serializable;
 public class AddProgressDialogFragment extends TitleBarDialogFragment {
 
     public static interface Callbacks {
-        void onAddProgress(int progress);
+        void onProgressAdded(int progress);
     }
 
     private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
         @Override
-        public void onAddProgress(int progress) {
+        public void onProgressAdded(int progress) {
             // do nothing
         }
     };
 
-
-    private static final String KEY_WORK = "work";
-
-    private static final int MIN_PROGRESS_TO_ADD = 0;
+    private static final String KEY_MIN = "min";
+    private static final String KEY_MAX = "max";
 
     private Callbacks callbacks;
     private NumberPicker progressPicker;
-    private View addProgressButton;
-    private View cancelButton;
     private View contentView;
 
 
-    public static AddProgressDialogFragment newInstance(WorkAsAmount work) {
+    public static AddProgressDialogFragment newInstance(int min, int max) {
         AddProgressDialogFragment dialogFragment = new AddProgressDialogFragment();
         Bundle args = new Bundle();
-        args.putSerializable(KEY_WORK, (Serializable) work);
+        args.putInt(KEY_MIN, min);
+        args.putInt(KEY_MAX, max);
         dialogFragment.setArguments(args);
         return dialogFragment;
     }
@@ -89,16 +83,13 @@ public class AddProgressDialogFragment extends TitleBarDialogFragment {
 
     private void initContentView() {
         progressPicker = (NumberPicker) contentView.findViewById(R.id.progress_picker);
-        addProgressButton = contentView.findViewById(R.id.add_progress_button);
-        cancelButton = contentView.findViewById(R.id.cancel_button);
-
-        addProgressButton.setOnClickListener(new View.OnClickListener() {
+        contentView.findViewById(R.id.add_progress_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onAddProgressButtonClicked();
             }
         });
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        contentView.findViewById(R.id.cancel_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -108,29 +99,31 @@ public class AddProgressDialogFragment extends TitleBarDialogFragment {
 
     private void onAddProgressButtonClicked() {
         int number = progressPicker.getValue();
-        Optional<String> errorDescription = checkInputProgress(number);
-        if (errorDescription.isPresent()) {
-            showError(errorDescription.get());
+        Optional<String> error = getInputError(number);
+        if (error.isPresent()) {
+            showError(error.get());
         } else {
-            callbacks.onAddProgress(number);
+            callbacks.onProgressAdded(number);
             dismiss();
         }
     }
 
-    private Optional<String> checkInputProgress(int number) {
-        if (number >= MIN_PROGRESS_TO_ADD) {
+    private Optional<String> getInputError(int number) {
+        int min = getArguments().getInt(KEY_MIN);
+        int max = getArguments().getInt(KEY_MAX);
+        if (number >= min && number <= max) {
             return Optional.absent();
         }
-        return Optional.of(
-            getString(R.string.error_you_cant_add_progress_less_than) + " " + MIN_PROGRESS_TO_ADD
-        );
+        String format = getString(R.string.add_progress_dialog_error_format_you_can_add_progress_only_at_range);
+        return Optional.of(String.format(format, min, max));
     }
 
     private void showError(String errorDescription) {
         progressPicker.requestFocus();
-        IconToast.LENGTH_SHORT
+        IconToast.newShort()
                 .setText(errorDescription)
                 .setIcon(R.drawable.ic_alert_error)
+                .setIconPosition(IconToast.IconPosition.RIGHT)
                 .show(getActivity());
     }
 
@@ -141,10 +134,8 @@ public class AddProgressDialogFragment extends TitleBarDialogFragment {
     }
 
     private void setOnResume() {
-        WorkAsAmount work = (WorkAsAmount) getArguments().getSerializable(KEY_WORK);
-        progressPicker.setMinValue(MIN_PROGRESS_TO_ADD);
-        int maxPossibleProgressToAdd = (int) (work.getTotal() - work.getDone());
-        progressPicker.setMaxValue(maxPossibleProgressToAdd);
+        progressPicker.setMinValue(getArguments().getInt(KEY_MIN));
+        progressPicker.setMaxValue(getArguments().getInt(KEY_MAX));
     }
 
 }

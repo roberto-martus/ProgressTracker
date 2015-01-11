@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
 import com.cleancoder.base.android.ui.LockingOnViewClickListener;
+import com.cleancoder.base.android.util.TaggedLogger;
 import com.robertomartus.progresstracker.R;
 import com.robertomartus.progresstracker.data.WorkAsAmount;
 import com.robertomartus.progresstracker.data.adapter.StorageAdapter;
@@ -13,10 +14,14 @@ import com.robertomartus.progresstracker.meta.CurrentStorageAdaptersProvider;
 
 public class ProgressableItemActivity extends ActionBarActivity
         implements AddProgressDialogFragment.Callbacks {
+    private static final TaggedLogger logger = TaggedLogger.forClass(ProgressableItemActivity.class);
 
     private static final String TAG_PROGRESS_DISPLAY_FRAGMENT = "progress_display";
     private static final String TAG_ADD_PROGRESS_DIALOG_FRAGMENT = "add_progress_dialog";
-    private static final long ITEM_ID = 1342;
+
+    public static final long DEBUG_ITEM_ID = 1342;
+
+    private static final int MIN_PROGRESS_TO_ADD = 1;
 
     private StorageAdapter<WorkAsAmount, Long> workAsAmountStorageAdapter;
     private WorkAsAmount work;
@@ -25,14 +30,18 @@ public class ProgressableItemActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progressable_item);
+        setOnCreate(savedInstanceState);
+    }
+
+    private void setOnCreate(Bundle savedInstanceState) {
         workAsAmountStorageAdapter =
                 CurrentStorageAdaptersProvider.get().getWorkAsAmountStorageAdapter(this);
-        work = workAsAmountStorageAdapter.loadByKey(ITEM_ID);
+        work = workAsAmountStorageAdapter.loadByKey(DEBUG_ITEM_ID);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.progress_display_fragment_container,
-                            ProgressDisplayFragment.newInstance(ITEM_ID),
-                            TAG_PROGRESS_DISPLAY_FRAGMENT)
+                         ProgressDisplayFragment.newInstance(DEBUG_ITEM_ID),
+                         TAG_PROGRESS_DISPLAY_FRAGMENT)
                     .commit();
         }
         initView();
@@ -56,7 +65,8 @@ public class ProgressableItemActivity extends ActionBarActivity
     }
 
     private void onAddButtonClicked() {
-        AddProgressDialogFragment dialog = AddProgressDialogFragment.newInstance(work);
+        int maxProgress = (int) (work.getTotal() - work.getDone());
+        AddProgressDialogFragment dialog = AddProgressDialogFragment.newInstance(MIN_PROGRESS_TO_ADD, maxProgress);
         dialog.show(getSupportFragmentManager(), TAG_ADD_PROGRESS_DIALOG_FRAGMENT);
     }
 
@@ -65,7 +75,7 @@ public class ProgressableItemActivity extends ActionBarActivity
     }
 
     @Override
-    public void onAddProgress(int progress) {
+    public void onProgressAdded(int progress) {
         addProgress(progress);
         displayCurrentProgress();
     }
@@ -78,19 +88,7 @@ public class ProgressableItemActivity extends ActionBarActivity
     private void displayCurrentProgress() {
         ProgressDisplayFragment progressDisplayFragment = (ProgressDisplayFragment)
                 getSupportFragmentManager().findFragmentByTag(TAG_PROGRESS_DISPLAY_FRAGMENT);
-        if (progressDisplayFragment != null) {
-        }
-        progressDisplayFragment.show(work);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setOnResume();
-    }
-
-    private void setOnResume() {
-        displayCurrentProgress();
+        progressDisplayFragment.update();
     }
 
 }

@@ -19,6 +19,7 @@ public class ProgressTrackerApplication extends Application {
     public void onCreate() {
         super.onCreate();
         setupDaoSession();
+        ActionsOnApplicationStart.run(this);
     }
 
     private void setupDaoSession() {

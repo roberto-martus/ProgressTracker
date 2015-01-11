@@ -34,8 +34,13 @@ public class IconToast {
         }
     }
 
-    public static IconToast LENGTH_LONG = new IconToast(Toast.LENGTH_LONG);
-    public static IconToast LENGTH_SHORT = new IconToast(Toast.LENGTH_SHORT);
+    public static IconToast newLong() {
+        return new IconToast(Toast.LENGTH_LONG);
+    }
+
+    public static IconToast newShort() {
+        return new IconToast(Toast.LENGTH_SHORT);
+    }
 
     private static final WrappedResourceProvider<String>
             EMPTY_TEXT_PROVIDER = new WrappedResourceProvider<String>("");
@@ -72,6 +77,11 @@ public class IconToast {
 
     public IconToast setIcon(Drawable icon) {
         iconProvider = (icon != null) ? new WrappedResourceProvider<Drawable>(icon) : EMPTY_ICON_PROVIDER;
+        return this;
+    }
+
+    public IconToast setIconPosition(IconPosition iconPosition) {
+        this.iconPosition = iconPosition;
         return this;
     }
 
