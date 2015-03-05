@@ -1,4 +1,4 @@
-package com.robertomartus.progresstracker.util;
+package com.cleancoder.base.android.ui;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;

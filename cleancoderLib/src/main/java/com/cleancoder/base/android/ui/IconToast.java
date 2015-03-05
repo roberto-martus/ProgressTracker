@@ -34,11 +34,11 @@ public class IconToast {
         }
     }
 
-    public static IconToast newLong() {
+    public static IconToast lengthLong() {
         return new IconToast(Toast.LENGTH_LONG);
     }
 
-    public static IconToast newShort() {
+    public static IconToast lengthShort() {
         return new IconToast(Toast.LENGTH_SHORT);
     }
 

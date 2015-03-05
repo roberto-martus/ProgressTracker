@@ -8,6 +8,4 @@
     <dimen name="progress_display_padding_top">8dp</dimen>
     <dimen name="progress_display_padding_bottom">8dp</dimen>
 
-    <dimen name="dialog_add_progress_min_button_width">180dp</dimen>
-
 </resources>

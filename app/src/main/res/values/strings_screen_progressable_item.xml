@@ -2,5 +2,4 @@
 <resources>
     <string name="label_add_button">Add</string>
     <string name="label_remove_button">Remove</string>
-    <string name="label_add_progress_button">Add</string>
 </resources>

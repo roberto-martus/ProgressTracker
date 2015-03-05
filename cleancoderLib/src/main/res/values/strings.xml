@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">ContentProviders</string>
+    <string name="number_picker_dialog_error_format_you_can_add_number_only_at_range"
+        formatted="false">Allowed number only at range [%d, %d]</string>
 </resources>
